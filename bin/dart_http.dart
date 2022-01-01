@@ -43,8 +43,9 @@ void main(List<String> arguments) async {
   Uri uri = Uri.parse('https://jsonplaceholder.typicode.com/posts');
   Fetch fetch = Fetch(uri: uri);
 
+  print('Fetch data with then-catchError...');
   fetch.get().then((value) {
-    print("running success");
+    print("running success from then-catchError");
     return value;
   }).catchError((err) {
     if (err is http.Response) {
@@ -54,6 +55,7 @@ void main(List<String> arguments) async {
   });
 
   try {
+    print('\nFetch data with try-catch...');
     var response = await get(uri);
 
     List<Post> result = [];
@@ -64,4 +66,10 @@ void main(List<String> arguments) async {
   } on http.Response catch (err) {
     print("Failed to get data, Code: ${err.statusCode}");
   }
+
+  print("\nRunning POST method...");
+  var resultPost = await http.post(uri,
+      body: json
+          .encode({'title': 'Hello', 'body': 'Hello World !', 'userId': 1}));
+  print(resultPost.body);
 }
